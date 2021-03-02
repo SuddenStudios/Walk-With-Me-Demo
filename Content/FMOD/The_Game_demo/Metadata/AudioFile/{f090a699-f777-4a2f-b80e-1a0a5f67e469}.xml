@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{f090a699-f777-4a2f-b80e-1a0a5f67e469}">
+		<property name="assetPath">
+			<value>PM_MMM_FREE_MECHANICAL_MORPHS_1.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>96</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>1.7086874999999999</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{6a70913c-fe89-4e0d-87ff-ff959a208501}</destination>
+		</relationship>
+	</object>
+</objects>
