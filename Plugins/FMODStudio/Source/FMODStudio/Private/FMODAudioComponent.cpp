@@ -351,6 +351,7 @@ void UFMODAudioComponent::TickComponent(float DeltaTime, enum ELevelTick TickTyp
 
     if (IsActive())
     {
+<<<<<<< Updated upstream
         if (GetStudioModule().HasListenerMoved())
         {
             UpdateInteriorVolumes();
@@ -381,6 +382,43 @@ void UFMODAudioComponent::TickComponent(float DeltaTime, enum ELevelTick TickTyp
 
         FMOD_STUDIO_PLAYBACK_STATE state = FMOD_STUDIO_PLAYBACK_STOPPED;
         StudioInstance->getPlaybackState(&state);
+=======
+        FMOD_STUDIO_PLAYBACK_STATE state = FMOD_STUDIO_PLAYBACK_STOPPED;
+
+        if (StudioInstance)
+        {
+            if (GetStudioModule().HasListenerMoved())
+            {
+                UpdateInteriorVolumes();
+                UpdateAttenuation();
+                ApplyVolumeLPF();
+            }
+
+            if (bEnableTimelineCallbacks)
+            {
+                TArray<FTimelineMarkerProperties> LocalMarkerQueue;
+                TArray<FTimelineBeatProperties> LocalBeatQueue;
+                {
+                    FScopeLock Lock(&CallbackLock);
+                    Swap(LocalMarkerQueue, CallbackMarkerQueue);
+                    Swap(LocalBeatQueue, CallbackBeatQueue);
+                }
+
+                for (const FTimelineMarkerProperties &EachProps : LocalMarkerQueue)
+                {
+                    OnTimelineMarker.Broadcast(EachProps.Name, EachProps.Position);
+                }
+                for (const FTimelineBeatProperties &EachProps : LocalBeatQueue)
+                {
+                    OnTimelineBeat.Broadcast(
+                        EachProps.Bar, EachProps.Beat, EachProps.Position, EachProps.Tempo, EachProps.TimeSignatureUpper, EachProps.TimeSignatureLower);
+                }
+            }
+
+            StudioInstance->getPlaybackState(&state);
+        }
+
+>>>>>>> Stashed changes
         if (state == FMOD_STUDIO_PLAYBACK_STOPPED)
         {
             OnPlaybackCompleted();
@@ -413,10 +451,17 @@ void UFMODAudioComponent::PostLoad()
 
 void UFMODAudioComponent::Activate(bool bReset)
 {
+<<<<<<< Updated upstream
     Super::Activate(bReset);
     if (bReset || ShouldActivate() == true)
     {
         Play();
+=======
+    if (bReset || ShouldActivate() == true)
+    {
+        // Don't call Super::Activate here - PlayInternal will do that if successful
+        PlayInternal(EFMODSystemContext::Max, bReset);
+>>>>>>> Stashed changes
     }
 }
 
@@ -593,7 +638,11 @@ void UFMODAudioComponent::Play()
     PlayInternal(EFMODSystemContext::Max);
 }
 
+<<<<<<< Updated upstream
 void UFMODAudioComponent::PlayInternal(EFMODSystemContext::Type Context)
+=======
+void UFMODAudioComponent::PlayInternal(EFMODSystemContext::Type Context, bool bReset)
+>>>>>>> Stashed changes
 {
     Stop();
 
@@ -676,11 +725,23 @@ void UFMODAudioComponent::PlayInternal(EFMODSystemContext::Type Context)
         {
             verifyfmod(StudioInstance->setCallback(UFMODAudioComponent_EventCallback));
         }
+<<<<<<< Updated upstream
         verifyfmod(StudioInstance->setUserData(this));
         verifyfmod(StudioInstance->start());
         UE_LOG(LogFMOD, Verbose, TEXT("Playing component %p"), this);
         SetActiveFlag(true);
         SetComponentTickEnabled(true);
+=======
+
+        verifyfmod(StudioInstance->setUserData(this));
+        verifyfmod(StudioInstance->start());
+        UE_LOG(LogFMOD, Verbose, TEXT("Playing component %p"), this);
+
+        if (bReset || ShouldActivate() == true)
+        {
+            Super::Activate(bReset);
+        }
+>>>>>>> Stashed changes
     }
 }
 
@@ -739,6 +800,7 @@ void UFMODAudioComponent::TriggerCue()
 void UFMODAudioComponent::OnPlaybackCompleted()
 {
     // Mark inactive before calling destroy to avoid recursion
+<<<<<<< Updated upstream
     UE_LOG(LogFMOD, Verbose, TEXT("UFMODAudioComponent %p PlaybackCompleted"), this);
     SetActive(false);
     SetComponentTickEnabled(false);
@@ -748,6 +810,20 @@ void UFMODAudioComponent::OnPlaybackCompleted()
     // Fire callback after we have cleaned up our instance
     OnEventStopped.Broadcast();
 
+=======
+    SetActive(false);
+    SetComponentTickEnabled(false);
+
+    if (StudioInstance)
+    {
+        UE_LOG(LogFMOD, Verbose, TEXT("UFMODAudioComponent %p PlaybackCompleted"), this);
+        Release();
+
+        // Fire callback after we have cleaned up our instance
+        OnEventStopped.Broadcast();
+    }
+    
+>>>>>>> Stashed changes
     // Auto destruction is handled via marking object for deletion.
     if (bAutoDestroy)
     {

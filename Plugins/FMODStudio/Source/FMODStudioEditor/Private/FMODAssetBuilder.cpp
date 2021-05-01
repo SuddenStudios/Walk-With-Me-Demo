@@ -12,8 +12,15 @@
 #include "FMODSnapshotReverb.h"
 #include "FMODUtils.h"
 #include "FMODVCA.h"
+<<<<<<< Updated upstream
 #include "HAL/FileManager.h"
 #include "ObjectTools.h"
+=======
+#include "FileHelpers.h"
+#include "ObjectTools.h"
+#include "SourceControlHelpers.h"
+#include "HAL/FileManager.h"
+>>>>>>> Stashed changes
 
 #include "fmod_studio.hpp"
 
@@ -31,16 +38,32 @@ void FFMODAssetBuilder::Create()
     FMOD::System *lowLevelSystem = nullptr;
     verifyfmod(StudioSystem->getCoreSystem(&lowLevelSystem));
     verifyfmod(lowLevelSystem->setOutput(FMOD_OUTPUTTYPE_NOSOUND_NRT));
+<<<<<<< Updated upstream
     verifyfmod(StudioSystem->initialize(1, FMOD_STUDIO_INIT_ALLOW_MISSING_PLUGINS | FMOD_STUDIO_INIT_SYNCHRONOUS_UPDATE, FMOD_INIT_MIX_FROM_UPDATE, nullptr));
+=======
+    verifyfmod(StudioSystem->initialize(1, FMOD_STUDIO_INIT_ALLOW_MISSING_PLUGINS | FMOD_STUDIO_INIT_SYNCHRONOUS_UPDATE, FMOD_INIT_MIX_FROM_UPDATE,
+        nullptr));
+>>>>>>> Stashed changes
 }
 
 void FFMODAssetBuilder::ProcessBanks()
 {
+<<<<<<< Updated upstream
     const UFMODSettings& Settings = *GetDefault<UFMODSettings>();
     FString PackagePath = Settings.ContentBrowserPrefix + FFMODAssetTable::PrivateDataPath();
     BuildBankLookup(FFMODAssetTable::BankLookupName(), PackagePath, Settings);
     BuildAssets(Settings);
     BuildAssetLookup(FFMODAssetTable::AssetLookupName(), PackagePath);
+=======
+    TArray<UObject*> AssetsToSave;
+    TArray<UObject*> AssetsToDelete;
+    const UFMODSettings& Settings = *GetDefault<UFMODSettings>();
+    FString PackagePath = Settings.ContentBrowserPrefix + FFMODAssetTable::PrivateDataPath();
+    BuildBankLookup(FFMODAssetTable::BankLookupName(), PackagePath, Settings, AssetsToSave);
+    BuildAssets(Settings, FFMODAssetTable::AssetLookupName(), PackagePath, AssetsToSave, AssetsToDelete);
+    SaveAssets(AssetsToSave);
+    DeleteAssets(AssetsToDelete);
+>>>>>>> Stashed changes
 }
 
 FString FFMODAssetBuilder::GetMasterStringsBankPath()
@@ -48,7 +71,12 @@ FString FFMODAssetBuilder::GetMasterStringsBankPath()
     return BankLookup ? BankLookup->MasterStringsBankPath : FString();
 }
 
+<<<<<<< Updated upstream
 void FFMODAssetBuilder::BuildAssets(const UFMODSettings& InSettings)
+=======
+void FFMODAssetBuilder::BuildAssets(const UFMODSettings& InSettings, const FString &AssetLookupName, const FString &AssetLookupPath,
+    TArray<UObject*>& AssetsToSave, TArray<UObject*>& AssetsToDelete)
+>>>>>>> Stashed changes
 {
     if (!BankLookup->MasterStringsBankPath.IsEmpty())
     {
@@ -108,6 +136,7 @@ void FFMODAssetBuilder::BuildAssets(const UFMODSettings& InSettings)
             verifyfmod(StudioStringBank->unload());
             verifyfmod(StudioSystem->update());
 
+<<<<<<< Updated upstream
             // Create new asset map - move existing assets over if they still match
             TMap<FString, TWeakObjectPtr<UFMODAsset>> NewNameLookup;
 
@@ -141,6 +170,90 @@ void FFMODAssetBuilder::BuildAssets(const UFMODSettings& InSettings)
             }
 
             NameLookup = NewNameLookup;
+=======
+            // Load or create asset lookup
+            FString AssetLookupPackageName = AssetLookupPath + AssetLookupName;
+            UPackage *AssetLookupPackage = CreatePackage(*AssetLookupPackageName);
+            AssetLookupPackage->FullyLoad();
+
+            bool bAssetLookupCreated = false;
+            bool bAssetLookupModified = false;
+
+            UDataTable *AssetLookup = FindObject<UDataTable>(AssetLookupPackage, *AssetLookupName, true);
+
+            if (!AssetLookup)
+            {
+                AssetLookup = NewObject<UDataTable>(AssetLookupPackage, *AssetLookupName, RF_Public | RF_Standalone | RF_MarkAsRootSet);
+                AssetLookup->RowStruct = FFMODAssetLookupRow::StaticStruct();
+                bAssetLookupCreated = true;
+            }
+
+            // Create a list of existing assets in the lookup - we'll use this to delete stale assets
+            TMap<FName, FFMODAssetLookupRow> StaleAssets{};
+            AssetLookup->ForeachRow<FFMODAssetLookupRow>(FString(), [&StaleAssets](const FName& Key, const FFMODAssetLookupRow& Value) {
+                StaleAssets.Add(Key, Value);
+            });
+
+            for (const AssetCreateInfo &CreateInfo : AssetCreateInfos)
+            {
+                UFMODAsset *Asset = CreateAsset(CreateInfo, AssetsToSave);
+
+                if (Asset)
+                {
+                    UPackage *AssetPackage = Asset->GetPackage();
+                    FString AssetPackageName = AssetPackage->GetPathName();
+                    FString AssetName = Asset->GetPathName(AssetPackage);
+                    FName LookupRowName = FName(*CreateInfo.StudioPath);
+                    FFMODAssetLookupRow* LookupRow = AssetLookup->FindRow<FFMODAssetLookupRow>(LookupRowName, FString(), false);
+
+                    if (LookupRow)
+                    {
+                        if (LookupRow->PackageName != AssetPackageName || LookupRow->AssetName != AssetName)
+                        {
+                            LookupRow->PackageName = AssetPackageName;
+                            LookupRow->AssetName = AssetName;
+                            bAssetLookupModified = true;
+                        }
+                    }
+                    else
+                    {
+                        FFMODAssetLookupRow NewRow{};
+                        NewRow.PackageName = AssetPackageName;
+                        NewRow.AssetName = AssetName;
+                        AssetLookup->AddRow(LookupRowName, NewRow);
+                        bAssetLookupModified = true;
+                    }
+
+                    StaleAssets.Remove(LookupRowName);
+                }
+            }
+
+            // Delete stale assets
+            if (StaleAssets.Num() > 0)
+            {
+                for (auto& Entry : StaleAssets)
+                {
+                    UPackage *Package = CreatePackage(*Entry.Value.PackageName);
+                    Package->FullyLoad();
+                    UFMODAsset *Asset = Package ?  FindObject<UFMODAsset>(Package, *Entry.Value.AssetName) : nullptr;
+
+                    if (Asset)
+                    {
+                        UE_LOG(LogFMOD, Log, TEXT("Deleting stale asset %s/%s."), *Entry.Value.PackageName, *Entry.Value.AssetName);
+                        AssetsToDelete.Add(Asset);
+                    }
+
+                    AssetLookup->RemoveRow(Entry.Key);
+                }
+
+                bAssetLookupModified = true;
+            }
+
+            if (bAssetLookupCreated || bAssetLookupModified)
+            {
+                AssetsToSave.Add(AssetLookup);
+            }
+>>>>>>> Stashed changes
         }
         else
         {
@@ -149,13 +262,19 @@ void FFMODAssetBuilder::BuildAssets(const UFMODSettings& InSettings)
     }
 }
 
+<<<<<<< Updated upstream
 void FFMODAssetBuilder::BuildBankLookup(const FString &AssetName, const FString &PackagePath, const UFMODSettings &InSettings)
+=======
+void FFMODAssetBuilder::BuildBankLookup(const FString &AssetName, const FString &PackagePath, const UFMODSettings &InSettings,
+    TArray<UObject*>& AssetsToSave)
+>>>>>>> Stashed changes
 {
     FString PackageName = PackagePath + AssetName;
     UPackage *Package = CreatePackage(*PackageName);
     Package->FullyLoad();
 
     bool bCreated = false;
+<<<<<<< Updated upstream
     BankLookup = FindObject<UFMODBankLookup>(Package, *AssetName, true);
 
     if (BankLookup)
@@ -166,6 +285,13 @@ void FFMODAssetBuilder::BuildBankLookup(const FString &AssetName, const FString 
         BankLookup->DataTable->EmptyTable();
     }
     else
+=======
+    bool bModified = false;
+
+    BankLookup = FindObject<UFMODBankLookup>(Package, *AssetName, true);
+
+    if (!BankLookup)
+>>>>>>> Stashed changes
     {
         BankLookup = NewObject<UFMODBankLookup>(Package, *AssetName, RF_Public | RF_Standalone | RF_MarkAsRootSet);
         BankLookup->DataTable = NewObject<UDataTable>(BankLookup, "DataTable", RF_NoFlags);
@@ -173,6 +299,14 @@ void FFMODAssetBuilder::BuildBankLookup(const FString &AssetName, const FString 
         bCreated = true;
     }
 
+<<<<<<< Updated upstream
+=======
+    // Get a list of all bank GUIDs already in the lookup - this will be used to remove stale GUIDs after processing
+    // the current banks on disk.
+    TArray<FName> StaleBanks(BankLookup->DataTable->GetRowNames());
+
+    // Process all banks on disk
+>>>>>>> Stashed changes
     TArray<FString> BankPaths;
     FString SearchDir = InSettings.GetFullBankPath();
     IFileManager::Get().FindFilesRecursive(BankPaths, *SearchDir, TEXT("*.bank"), true, false, false);
@@ -195,13 +329,25 @@ void FFMODAssetBuilder::BuildBankLookup(const FString &AssetName, const FString 
             FName OuterRowName(*GUID);
             FFMODLocalizedBankTable *Row = BankLookup->DataTable->FindRow<FFMODLocalizedBankTable>(OuterRowName, nullptr, false);
 
+<<<<<<< Updated upstream
             if (!Row)
+=======
+            if (Row)
+            {
+                StaleBanks.RemoveSingle(OuterRowName);
+            }
+            else
+>>>>>>> Stashed changes
             {
                 FFMODLocalizedBankTable NewRow{};
                 NewRow.Banks = NewObject<UDataTable>(BankLookup->DataTable, *GUID, RF_NoFlags);
                 NewRow.Banks->RowStruct = FFMODLocalizedBankRow::StaticStruct();
                 BankLookup->DataTable->AddRow(OuterRowName, NewRow);
                 Row = BankLookup->DataTable->FindRow<FFMODLocalizedBankTable>(OuterRowName, nullptr, false);
+<<<<<<< Updated upstream
+=======
+                bModified = true;
+>>>>>>> Stashed changes
             }
 
             FString CurFilename = FPaths::GetCleanFilename(BankPath);
@@ -211,8 +357,11 @@ void FFMODAssetBuilder::BuildBankLookup(const FString &AssetName, const FString 
             FPaths::Split(BankPath, PathPart, FilenamePart, ExtensionPart);
             FString RelativeBankPath = BankPath.RightChop(InSettings.GetFullBankPath().Len() + 1);
 
+<<<<<<< Updated upstream
             FFMODLocalizedBankRow InnerRow{};
             InnerRow.Path = RelativeBankPath;
+=======
+>>>>>>> Stashed changes
             FString InnerRowName("<NON-LOCALIZED>");
 
             for (const FFMODProjectLocale &Locale : InSettings.Locales)
@@ -224,6 +373,7 @@ void FFMODAssetBuilder::BuildBankLookup(const FString &AssetName, const FString 
                 }
             }
 
+<<<<<<< Updated upstream
             Row->Banks->AddRow(FName(*InnerRowName), InnerRow);
 
             if (BankLookup->MasterBankPath.IsEmpty() && CurFilename == InSettings.GetMasterBankFilename())
@@ -237,6 +387,40 @@ void FFMODAssetBuilder::BuildBankLookup(const FString &AssetName, const FString 
             else if (BankLookup->MasterAssetsBankPath.IsEmpty() && CurFilename == InSettings.GetMasterAssetsBankFilename())
             {
                 BankLookup->MasterAssetsBankPath = RelativeBankPath;
+=======
+            FFMODLocalizedBankRow *InnerRow = Row->Banks->FindRow<FFMODLocalizedBankRow>(FName(*InnerRowName), nullptr, false);
+
+            if (InnerRow)
+            {
+                if (InnerRow->Path != RelativeBankPath)
+                {
+                    InnerRow->Path = RelativeBankPath;
+                    bModified = true;
+                }
+            }
+            else
+            {
+                FFMODLocalizedBankRow NewRow{};
+                NewRow.Path = RelativeBankPath;
+                Row->Banks->AddRow(FName(*InnerRowName), NewRow);
+                bModified = true;
+            }
+
+            if (CurFilename == InSettings.GetMasterBankFilename() && BankLookup->MasterBankPath != RelativeBankPath)
+            {
+                BankLookup->MasterBankPath = RelativeBankPath;
+                bModified = true;
+            }
+            else if (CurFilename == InSettings.GetMasterStringsBankFilename() && BankLookup->MasterStringsBankPath != RelativeBankPath)
+            {
+                BankLookup->MasterStringsBankPath = RelativeBankPath;
+                bModified = true;
+            }
+            else if (CurFilename == InSettings.GetMasterAssetsBankFilename() && BankLookup->MasterAssetsBankPath != RelativeBankPath)
+            {
+                BankLookup->MasterAssetsBankPath = RelativeBankPath;
+                bModified = true;
+>>>>>>> Stashed changes
             }
         }
         else
@@ -247,6 +431,7 @@ void FFMODAssetBuilder::BuildBankLookup(const FString &AssetName, const FString 
 
     StudioSystem->flushCommands();
 
+<<<<<<< Updated upstream
     Package->MarkPackageDirty();
     FString PackageFileName = FPackageName::LongPackageNameToFilename(PackageName, FPackageName::GetAssetPackageExtension());
 
@@ -254,12 +439,24 @@ void FFMODAssetBuilder::BuildBankLookup(const FString &AssetName, const FString 
         true, true, SAVE_None))
     {
         UE_LOG(LogFMOD, Error, TEXT("Failed to save package %s."), *PackageFileName);
+=======
+    // Remove stale banks from lookup
+    if (StaleBanks.Num() > 0)
+    {
+        for (const auto& RowName : StaleBanks)
+        {
+            BankLookup->DataTable->RemoveRow(RowName);
+        }
+
+        bModified = true;
+>>>>>>> Stashed changes
     }
 
     if (bCreated)
     {
         FAssetRegistryModule::AssetCreated(BankLookup);
     }
+<<<<<<< Updated upstream
 }
 
 void FFMODAssetBuilder::BuildAssetLookup(const FString &AssetName, const FString &PackagePath)
@@ -291,6 +488,13 @@ void FFMODAssetBuilder::BuildAssetLookup(const FString &AssetName, const FString
     }
 
     FAssetRegistryModule::AssetCreated(AssetLookup);
+=======
+    
+    if (bCreated || bModified)
+    {
+        AssetsToSave.Add(BankLookup);
+    }
+>>>>>>> Stashed changes
 }
 
 FString FFMODAssetBuilder::GetAssetClassName(UClass* AssetClass)
@@ -372,7 +576,11 @@ bool FFMODAssetBuilder::MakeAssetCreateInfo(const FGuid &AssetGuid, const FStrin
     return true;
 }
 
+<<<<<<< Updated upstream
 UFMODAsset *FFMODAssetBuilder::CreateAsset(const AssetCreateInfo& CreateInfo)
+=======
+UFMODAsset *FFMODAssetBuilder::CreateAsset(const AssetCreateInfo& CreateInfo, TArray<UObject*>& AssetsToSave)
+>>>>>>> Stashed changes
 {
     FString SanitizedAssetName;
     FText OutReason;
@@ -404,6 +612,7 @@ UFMODAsset *FFMODAssetBuilder::CreateAsset(const AssetCreateInfo& CreateInfo)
             *SanitizedPackagePath);
     }
 
+<<<<<<< Updated upstream
     UE_LOG(LogFMOD, Log, TEXT("Constructing asset: %s"), *SanitizedPackagePath);
 
     UFMODAsset *Asset = nullptr;
@@ -429,6 +638,41 @@ UFMODAsset *FFMODAssetBuilder::CreateAsset(const AssetCreateInfo& CreateInfo)
             }
         }
     }
+=======
+    UPackage *Package = CreatePackage(*SanitizedPackagePath);
+    Package->FullyLoad();
+
+    UFMODAsset *Asset = FindObject<UFMODAsset>(Package, *SanitizedAssetName);
+    bool bCreated = false;
+    bool bModified = false;
+
+    if (Asset && Asset->GetClass() == CreateInfo.Class)
+    {
+        if (Asset->AssetGuid != CreateInfo.Guid)
+        {
+            UE_LOG(LogFMOD, Log, TEXT("Updating asset: %s"), *SanitizedPackagePath);
+            Asset->AssetGuid = CreateInfo.Guid;
+            bModified = true;
+        }
+    }
+    else
+    {
+        UE_LOG(LogFMOD, Log, TEXT("Adding asset: %s"), *SanitizedPackagePath);
+        Asset = NewObject<UFMODAsset>(Package, CreateInfo.Class, FName(*SanitizedAssetName), RF_Standalone | RF_Public | RF_MarkAsRootSet);
+        Asset->AssetGuid = CreateInfo.Guid;
+        bCreated = true;
+    }
+
+    if (bCreated)
+    {
+        FAssetRegistryModule::AssetCreated(Asset);
+    }
+
+    if (bCreated || bModified)
+    {
+        AssetsToSave.Add(Asset);
+    }
+>>>>>>> Stashed changes
 
     if (!IsValid(Asset))
     {
@@ -442,6 +686,7 @@ UFMODAsset *FFMODAssetBuilder::CreateAsset(const AssetCreateInfo& CreateInfo)
         UObject *Outer = Asset->GetOuter() ? Asset->GetOuter() : Asset;
         FString ReverbPackagePath = Outer->GetPathName().Replace(*OldPrefix, *NewPrefix);
 
+<<<<<<< Updated upstream
         UE_LOG(LogFMOD, Log, TEXT("Constructing snapshot reverb asset: %s"), *ReverbPackagePath);
 
         UPackage *ReverbPackage = CreatePackage(*ReverbPackagePath);
@@ -466,6 +711,42 @@ UFMODAsset *FFMODAssetBuilder::CreateAsset(const AssetCreateInfo& CreateInfo)
                 }
             }
         }
+=======
+        UPackage *ReverbPackage = CreatePackage(*ReverbPackagePath);
+        ReverbPackage->FullyLoad();
+
+        UFMODSnapshotReverb *AssetReverb = FindObject<UFMODSnapshotReverb>(ReverbPackage, *SanitizedAssetName, true);
+        bCreated = false;
+        bModified = false;
+
+        if (AssetReverb)
+        {
+            if (AssetReverb->AssetGuid != CreateInfo.Guid)
+            {
+                UE_LOG(LogFMOD, Log, TEXT("Updating snapshot reverb asset: %s"), *ReverbPackagePath);
+                AssetReverb->AssetGuid = CreateInfo.Guid;
+                bModified = true;
+            }
+        }
+        else
+        {
+            UE_LOG(LogFMOD, Log, TEXT("Constructing snapshot reverb asset: %s"), *ReverbPackagePath);
+            AssetReverb = NewObject<UFMODSnapshotReverb>(ReverbPackage, UFMODSnapshotReverb::StaticClass(), FName(*SanitizedAssetName),
+                RF_Standalone | RF_Public | RF_MarkAsRootSet);
+            AssetReverb->AssetGuid = CreateInfo.Guid;
+            bCreated = true;
+        }
+
+        if (bCreated)
+        {
+            FAssetRegistryModule::AssetCreated(AssetReverb);
+        }
+
+        if (bCreated || bModified)
+        {
+            AssetsToSave.Add(AssetReverb);
+        }
+>>>>>>> Stashed changes
 
         if (!IsValid(AssetReverb))
         {
@@ -476,11 +757,48 @@ UFMODAsset *FFMODAssetBuilder::CreateAsset(const AssetCreateInfo& CreateInfo)
     return Asset;
 }
 
+<<<<<<< Updated upstream
 void FFMODAssetBuilder::DeleteAsset(UObject *Asset)
 {
     if (Asset)
     {
         TArray<UObject *> ObjectsToDelete;
+=======
+void FFMODAssetBuilder::SaveAssets(TArray<UObject*>& AssetsToSave)
+{
+    if (AssetsToSave.Num() == 0)
+    {
+        return;
+    }
+
+    TArray<UPackage *> PackagesToSave;
+
+    for (auto& Asset : AssetsToSave)
+    {
+        UPackage* Package = Asset->GetPackage();
+
+        if (Package)
+        {
+            Package->MarkPackageDirty();
+            PackagesToSave.Add(Package);
+        }
+    }
+
+    UEditorLoadingAndSavingUtils::SavePackages(PackagesToSave, true);
+}
+
+void FFMODAssetBuilder::DeleteAssets(TArray<UObject*>& AssetsToDelete)
+{
+    if (AssetsToDelete.Num() == 0)
+    {
+        return;
+    }
+
+    TArray<UObject*> ObjectsToDelete;
+
+    for (auto& Asset : AssetsToDelete)
+    {
+>>>>>>> Stashed changes
         ObjectsToDelete.Add(Asset);
 
         if (Asset->GetClass() == UFMODSnapshot::StaticClass())
@@ -497,7 +815,14 @@ void FFMODAssetBuilder::DeleteAsset(UObject *Asset)
                 ObjectsToDelete.Add(Reverb);
             }
         }
+<<<<<<< Updated upstream
 
         ObjectTools::ForceDeleteObjects(ObjectsToDelete, true);
     }
+=======
+    }
+
+    // Use ObjectTools to delete assets - ObjectTools::DeleteObjects handles confirmation, source control, and making read only files writables
+    ObjectTools::DeleteObjects(ObjectsToDelete, true);
+>>>>>>> Stashed changes
 }

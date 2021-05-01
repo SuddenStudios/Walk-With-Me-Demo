@@ -20,6 +20,10 @@
 #include "Sequencer/FMODEventParameterTrackEditor.h"
 #include "AssetTypeActions_FMODEvent.h"
 
+<<<<<<< Updated upstream
+=======
+#include "AssetRegistryModule.h"
+>>>>>>> Stashed changes
 #include "UnrealEd/Public/AssetSelection.h"
 #include "Slate/Public/Framework/Notifications/NotificationManager.h"
 #include "Slate/Public/Widgets/Notifications/SNotificationList.h"
@@ -200,7 +204,11 @@ public:
     bool Tick(float DeltaTime);
 
     /** Build UE4 assets for FMOD Studio items */
+<<<<<<< Updated upstream
     void BuildAssets();
+=======
+    void ProcessBanks();
+>>>>>>> Stashed changes
 
     /** Add extensions to menu */
     void RegisterHelpMenuEntries();
@@ -245,7 +253,10 @@ public:
     FDelegateHandle EndPIEDelegateHandle;
     FDelegateHandle PausePIEDelegateHandle;
     FDelegateHandle ResumePIEDelegateHandle;
+<<<<<<< Updated upstream
     FDelegateHandle HandleBanksReloadedDelegateHandle;
+=======
+>>>>>>> Stashed changes
     FDelegateHandle FMODControlTrackEditorCreateTrackEditorHandle;
     FDelegateHandle FMODParamTrackEditorCreateTrackEditorHandle;
 
@@ -359,24 +370,56 @@ void FFMODStudioEditorModule::OnPostEngineInit()
     OnTick = FTickerDelegate::CreateRaw(this, &FFMODStudioEditorModule::Tick);
     TickDelegateHandle = FTicker::GetCoreTicker().AddTicker(OnTick);
 
+<<<<<<< Updated upstream
     // Create assets
     AssetBuilder.Create();
     BuildAssets();
 
     // Pretend settings have updated to 
     BankUpdateNotifier.BanksUpdatedEvent.AddRaw(this, &FFMODStudioEditorModule::ReloadBanks);
+=======
+    // Create asset builder
+    AssetBuilder.Create();
+
+    if (!IsRunningCommandlet())
+    {
+        // Build assets when asset registry has finished loading
+        FAssetRegistryModule& AssetRegistry = FModuleManager::LoadModuleChecked<FAssetRegistryModule>(AssetRegistryConstants::ModuleName);
+        AssetRegistry.Get().OnFilesLoaded().AddLambda([this]() { ProcessBanks(); });
+    }
+
+    // Bind to bank update notifier to reload banks when they change on disk
+    BankUpdateNotifier.BanksUpdatedEvent.AddRaw(this, &FFMODStudioEditorModule::ProcessBanks);
+>>>>>>> Stashed changes
 
     // Register a callback to validate settings on startup
     IMainFrameModule& MainFrameModule = FModuleManager::LoadModuleChecked<IMainFrameModule>(TEXT("MainFrame"));
     MainFrameModule.OnMainFrameCreationFinished().AddRaw(this, &FFMODStudioEditorModule::OnMainFrameLoaded);
 }
 
+<<<<<<< Updated upstream
 void FFMODStudioEditorModule::BuildAssets()
 {
     if (!IsRunningCommandlet())
     {
         AssetBuilder.ProcessBanks();
         HandleSettingsSaved();
+=======
+void FFMODStudioEditorModule::ProcessBanks()
+{
+    if (!IsRunningCommandlet())
+    {
+        BankUpdateNotifier.EnableUpdate(false);
+        AssetBuilder.ProcessBanks();
+        ReloadBanks();
+
+        const UFMODSettings &Settings = *GetDefault<UFMODSettings>();
+        BankUpdateNotifier.SetFilePath(Settings.GetFullBankPath());
+
+        BankUpdateNotifier.EnableUpdate(true);
+
+        IFMODStudioModule::Get().RefreshSettings();
+>>>>>>> Stashed changes
     }
 }
 
@@ -730,7 +773,10 @@ void FFMODStudioEditorModule::ValidateFMOD()
                 // Just try to do it again anyway
                 StudioLink.Execute(TEXT("studio.project.save()"), Result);
                 StudioLink.Execute(TEXT("studio.project.build()"), Result);
+<<<<<<< Updated upstream
                 BuildAssets();
+=======
+>>>>>>> Stashed changes
             }
         }
 
@@ -1023,7 +1069,11 @@ bool FFMODStudioEditorModule::Tick(float DeltaTime)
         bRegisteredComponentVisualizers = true;
     }
 
+<<<<<<< Updated upstream
     BankUpdateNotifier.Update();
+=======
+    BankUpdateNotifier.Update(DeltaTime);
+>>>>>>> Stashed changes
 
     // Update listener position for Editor sound system
     FMOD::Studio::System *StudioSystem = IFMODStudioModule::Get().GetStudioSystem(EFMODSystemContext::Editor);
@@ -1179,25 +1229,40 @@ void FFMODStudioEditorModule::ShutdownModule()
 
 bool FFMODStudioEditorModule::HandleSettingsSaved()
 {
+<<<<<<< Updated upstream
     const UFMODSettings &Settings = *GetDefault<UFMODSettings>();
     BankUpdateNotifier.SetFilePath(Settings.GetFullBankPath() / AssetBuilder.GetMasterStringsBankPath());
     IFMODStudioModule::Get().RefreshSettings();
+=======
+    ProcessBanks();
+>>>>>>> Stashed changes
     return true;
 }
 
 void FFMODStudioEditorModule::ReloadBanks()
 {
+<<<<<<< Updated upstream
+=======
+    IFMODStudioModule::Get().ReloadBanks();
+    BanksReloadedDelegate.Broadcast();
+
+>>>>>>> Stashed changes
     // Show a reload notification
     TArray<FString> FailedBanks = IFMODStudioModule::Get().GetFailedBankLoads(EFMODSystemContext::Auditioning);
     FText Message;
     SNotificationItem::ECompletionState State;
     if (FailedBanks.Num() == 0)
     {
+<<<<<<< Updated upstream
         AssetBuilder.ProcessBanks();
         IFMODStudioModule::Get().ReloadBanks();
         Message = LOCTEXT("FMODBanksReloaded", "Reloaded FMOD Banks\n");
         State = SNotificationItem::CS_Success;
         BanksReloadedDelegate.Broadcast();
+=======
+        Message = LOCTEXT("FMODBanksReloaded", "Reloaded FMOD Banks\n");
+        State = SNotificationItem::CS_Success;
+>>>>>>> Stashed changes
     }
     else
     {

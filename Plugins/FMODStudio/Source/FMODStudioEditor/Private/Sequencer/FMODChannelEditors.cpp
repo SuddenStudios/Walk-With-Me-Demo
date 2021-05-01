@@ -9,14 +9,23 @@
 #include "ScopedTransaction.h"
 #include "EditorWidgets/Public/SEnumCombobox.h"
 #include "EditorStyleSet.h"
+<<<<<<< Updated upstream
 #if 0
+=======
+#include "Channels/MovieSceneChannelTraits.h"
+
+>>>>>>> Stashed changes
 class SFMODEventControlKeyEditor : public SCompoundWidget
 {
 public:
     SLATE_BEGIN_ARGS(SFMODEventControlKeyEditor) {}
     SLATE_END_ARGS();
 
+<<<<<<< Updated upstream
     void Construct(const FArguments &InArgs, TMovieSceneChannelHandle<FMovieSceneByteChannel> InChannelHandle,
+=======
+    void Construct(const FArguments &InArgs, TMovieSceneChannelHandle<FFMODEventControlChannel> InChannelHandle,
+>>>>>>> Stashed changes
         TWeakObjectPtr<UMovieSceneSection> InWeakSection, TWeakPtr<ISequencer> InWeakSequencer, UEnum *InEnum)
     {
         ChannelHandle = InChannelHandle;
@@ -31,7 +40,13 @@ public:
 private:
     int32 OnGetCurrentValueAsInt() const
     {
+<<<<<<< Updated upstream
         FMovieSceneByteChannel *Channel = ChannelHandle.Get();
+=======
+        using namespace UE::MovieScene;
+
+        FFMODEventControlChannel *Channel = ChannelHandle.Get();
+>>>>>>> Stashed changes
         ISequencer *Sequencer = WeakSequencer.Pin().Get();
         UMovieSceneSection *OwningSection = WeakSection.Get();
         uint8 Result = 0;
@@ -47,6 +62,11 @@ private:
 
     void SetValue(uint8 InValue)
     {
+<<<<<<< Updated upstream
+=======
+        using namespace UE::MovieScene;
+ 
+>>>>>>> Stashed changes
         UMovieSceneSection *OwningSection = WeakSection.Get();
         if (!OwningSection)
         {
@@ -55,7 +75,11 @@ private:
 
         OwningSection->SetFlags(RF_Transactional);
 
+<<<<<<< Updated upstream
         FMovieSceneByteChannel *Channel = ChannelHandle.Get();
+=======
+        FFMODEventControlChannel *Channel = ChannelHandle.Get();
+>>>>>>> Stashed changes
         ISequencer *Sequencer = WeakSequencer.Pin().Get();
 
         if (!OwningSection->TryModify() || !Channel || !Sequencer)
@@ -116,20 +140,35 @@ private:
         }
     }
 
+<<<<<<< Updated upstream
     TMovieSceneChannelHandle<FMovieSceneByteChannel> ChannelHandle;
+=======
+    TMovieSceneChannelHandle<FFMODEventControlChannel> ChannelHandle;
+>>>>>>> Stashed changes
     TWeakObjectPtr<UMovieSceneSection> WeakSection;
     TWeakPtr<ISequencer> WeakSequencer;
 };
 
+<<<<<<< Updated upstream
 bool CanCreateKeyEditor(const FMovieSceneByteChannel *Channel)
+=======
+bool CanCreateKeyEditor(const FFMODEventControlChannel *Channel)
+>>>>>>> Stashed changes
 {
     return true;
 }
 
+<<<<<<< Updated upstream
 TSharedRef<SWidget> CreateKeyEditor(const TMovieSceneChannelHandle<FMovieSceneByteChannel> &Channel, UMovieSceneSection *Section,
     const FGuid &InObjectBindingID, TWeakPtr<FTrackInstancePropertyBindings> PropertyBindings, TWeakPtr<ISequencer> InSequencer)
 {
     const FMovieSceneByteChannel *RawChannel = Channel.Get();
+=======
+TSharedRef<SWidget> CreateKeyEditor(const TMovieSceneChannelHandle<FFMODEventControlChannel> &Channel, UMovieSceneSection *Section,
+    const FGuid &InObjectBindingID, TWeakPtr<FTrackInstancePropertyBindings> PropertyBindings, TWeakPtr<ISequencer> InSequencer)
+{
+    const FFMODEventControlChannel *RawChannel = Channel.Get();
+>>>>>>> Stashed changes
 
     if (!RawChannel)
     {
@@ -139,6 +178,7 @@ TSharedRef<SWidget> CreateKeyEditor(const TMovieSceneChannelHandle<FMovieSceneBy
     UEnum *Enum = RawChannel->GetEnum();
     return SNew(SFMODEventControlKeyEditor, Channel, Section, InSequencer, Enum);
 }
+<<<<<<< Updated upstream
 #endif
 
 TSharedPtr<FStructOnScope> GetKeyStruct(const TMovieSceneChannelHandle<FFMODEventControlChannel> &ChannelHandle, FKeyHandle InHandle)
@@ -168,6 +208,10 @@ TSharedPtr<FStructOnScope> GetKeyStruct(const TMovieSceneChannelHandle<FFMODEven
 }
 
 void DrawKeys(FFMODEventControlChannel *Channel, TArrayView<const FKeyHandle> InKeyHandles, TArrayView<FKeyDrawParams> OutKeyDrawParams)
+=======
+
+void DrawKeys(FFMODEventControlChannel *Channel, TArrayView<const FKeyHandle> InKeyHandles, const UMovieSceneSection* InOwner, TArrayView<FKeyDrawParams> OutKeyDrawParams)
+>>>>>>> Stashed changes
 {
     static const FName KeyLeftBrushName("Sequencer.KeyLeft");
     static const FName KeyRightBrushName("Sequencer.KeyRight");

@@ -58,7 +58,11 @@ typedef unsigned long long         FMOD_PORT_INDEX;
 /*
     FMOD constants
 */
+<<<<<<< Updated upstream
 #define FMOD_VERSION    0x00020108                     /* 0xaaaabbcc -> aaaa = product version, bb = major version, cc = minor version.*/
+=======
+#define FMOD_VERSION    0x00020109                     /* 0xaaaabbcc -> aaaa = product version, bb = major version, cc = minor version.*/
+>>>>>>> Stashed changes
 
 typedef unsigned int FMOD_DEBUG_FLAGS;
 #define FMOD_DEBUG_LEVEL_NONE                       0x00000000

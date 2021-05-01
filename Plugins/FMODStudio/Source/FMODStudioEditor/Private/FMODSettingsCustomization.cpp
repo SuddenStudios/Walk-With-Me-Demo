@@ -46,6 +46,7 @@ public:
             FText()
         );
 
+<<<<<<< Updated upstream
         TSharedRef<SWidget> NotPackagedWidget = MakeRow(
             "SettingsEditor.WarningIcon",
             LOCTEXT("NotPackagedText",
@@ -70,6 +71,17 @@ public:
                 "It is recommended to remove FMOD from the \"Additional Non-Asset Directories to Package\" list."
             ),
             LOCTEXT("RemoveFromUFS", "Remove")
+=======
+        TSharedRef<SWidget> PackagingSettingsBadWidget = MakeRow(
+            "SettingsEditor.WarningIcon",
+            LOCTEXT("PackagingSettingsBadText",
+                "The packaging settings for copying the FMOD bank files to staging are not correct. It is recommended that the bank output directory "
+                "for the Desktop platform (or the forced platform if set) is added to the \"Additional Non-Asset Directories To Copy\" list, and "
+                "that no other directory containing FMOD banks or assets is added to either the \"Additional Non-Asset Directories To Copy\" list "
+                "or the \"Additional Non-Asset Directories to Package\" list."
+            ),
+            LOCTEXT("FixPackagingSettings", "Fix")
+>>>>>>> Stashed changes
         );
 
         ChildSlot
@@ -94,6 +106,7 @@ public:
 
                     + SWidgetSwitcher::Slot()
                     [
+<<<<<<< Updated upstream
                         AddedToUFSWidget
                     ]
 
@@ -105,6 +118,9 @@ public:
                     + SWidgetSwitcher::Slot()
                     [
                         AddedToBothWidget
+=======
+                        PackagingSettingsBadWidget
+>>>>>>> Stashed changes
                     ]
                 ]
             ];
@@ -169,16 +185,37 @@ private:
     {
         const UFMODSettings& Settings = *GetDefault<UFMODSettings>();
         UProjectPackagingSettings* PackagingSettings = Cast<UProjectPackagingSettings>(UProjectPackagingSettings::StaticClass()->GetDefaultObject());
+<<<<<<< Updated upstream
         bool UpdateConfigFile = false;
 
         if (SettingsState == UFMODSettings::AddedToUFS || SettingsState == UFMODSettings::AddedToBoth)
         {
             // Remove from non-asset directories to package list
             for (int i = 0; i < PackagingSettings->DirectoriesToAlwaysStageAsUFS.Num(); ++i)
+=======
+
+        if (SettingsState == UFMODSettings::PackagingSettingsBad)
+        {
+            // Remove any bad entries
+            for (int i = 0; i < PackagingSettings->DirectoriesToAlwaysStageAsNonUFS.Num();)
+            {
+                if (PackagingSettings->DirectoriesToAlwaysStageAsNonUFS[i].Path.StartsWith(Settings.BankOutputDirectory.Path))
+                {
+                    PackagingSettings->DirectoriesToAlwaysStageAsNonUFS.RemoveAt(i);
+                }
+                else
+                {
+                    ++i;
+                }
+            }
+
+            for (int i = 0; i < PackagingSettings->DirectoriesToAlwaysStageAsUFS.Num();)
+>>>>>>> Stashed changes
             {
                 if (PackagingSettings->DirectoriesToAlwaysStageAsUFS[i].Path.StartsWith(Settings.BankOutputDirectory.Path))
                 {
                     PackagingSettings->DirectoriesToAlwaysStageAsUFS.RemoveAt(i);
+<<<<<<< Updated upstream
                     UpdateConfigFile = true;
                     break;
                 }
@@ -194,6 +231,20 @@ private:
 
         if (UpdateConfigFile)
         {
+=======
+                }
+                else
+                {
+                    ++i;
+                }
+            }
+
+            // Add correct entry
+            FDirectoryPath BankPath;
+            BankPath.Path = Settings.GetDesktopBankPath();
+            PackagingSettings->DirectoriesToAlwaysStageAsNonUFS.Add(BankPath);
+
+>>>>>>> Stashed changes
             PackagingSettings->UpdateDefaultConfigFile();
         }
 

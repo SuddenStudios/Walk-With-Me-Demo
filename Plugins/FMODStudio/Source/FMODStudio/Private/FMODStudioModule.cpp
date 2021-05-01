@@ -31,10 +31,22 @@
 #include "fmod_errors.h"
 #include "FMODStudioPrivatePCH.h"
 
+<<<<<<< Updated upstream
+=======
+#include <atomic>
+
+>>>>>>> Stashed changes
 #ifdef FMOD_PLATFORM_HEADER
 #include "FMODPlatform.h"
 #endif
 
+<<<<<<< Updated upstream
+=======
+#if PLATFORM_IOS || PLATFORM_TVOS
+#include <AVFoundation/AVAudioSession.h>
+#endif
+
+>>>>>>> Stashed changes
 #define LOCTEXT_NAMESPACE "FMODStudio"
 
 DEFINE_LOG_CATEGORY(LogFMOD);
@@ -169,8 +181,18 @@ public:
     {
         AsyncTask(ENamedThreads::GameThread, [&]() { SetSystemPaused(true); });
     }
+<<<<<<< Updated upstream
     void HandleApplicationHasReactivated()
     {
+=======
+
+    void HandleApplicationHasReactivated()
+    {
+#if PLATFORM_IOS || PLATFORM_TVOS
+        ActivateAudioSession();
+#endif
+
+>>>>>>> Stashed changes
         AsyncTask(ENamedThreads::GameThread, [&]() { SetSystemPaused(false); });
     }
 
@@ -243,6 +265,14 @@ public:
 
     void ResetInterpolation();
 
+<<<<<<< Updated upstream
+=======
+#if PLATFORM_IOS || PLATFORM_TVOS
+    void InitializeAudioSession();
+    void ActivateAudioSession();
+#endif
+
+>>>>>>> Stashed changes
     /** The studio system handle. */
     FMOD::Studio::System *StudioSystem[EFMODSystemContext::Max];
     FMOD::Studio::EventInstance *AuditioningInstance;
@@ -300,7 +330,11 @@ public:
     void *StudioLibHandle;
 
     /** True if the mixer has been paused by application deactivation */
+<<<<<<< Updated upstream
     bool bMixerPaused;
+=======
+    std::atomic<bool> bMixerPaused;
+>>>>>>> Stashed changes
 
     /** You can also supply a pool of memory for FMOD to work with and it will do so with no extra calls to malloc or free. */
     void *MemPool;
@@ -449,6 +483,10 @@ void FFMODStudioModule::StartupModule()
     if (FParse::Param(FCommandLine::Get(), TEXT("nosound")) || FApp::IsBenchmarking() || IsRunningDedicatedServer() || IsRunningCommandlet())
     {
         bUseSound = false;
+<<<<<<< Updated upstream
+=======
+        UE_LOG(LogFMOD, Log, TEXT("Running in nosound mode"));
+>>>>>>> Stashed changes
     }
 
     if (FParse::Param(FCommandLine::Get(), TEXT("noliveupdate")))
@@ -544,6 +582,15 @@ void FFMODStudioModule::CreateStudioSystem(EFMODSystemContext::Type Type)
         UE_LOG(LogFMOD, Verbose, TEXT("Enabling live update"));
         StudioInitFlags |= FMOD_STUDIO_INIT_LIVEUPDATE;
     }
+<<<<<<< Updated upstream
+=======
+
+    if (Settings.bEnableMemoryTracking && Type == EFMODSystemContext::Runtime)
+    {
+        StudioInitFlags |= FMOD_STUDIO_INIT_MEMORY_TRACKING;
+    }
+
+>>>>>>> Stashed changes
 #endif
     if (Type == EFMODSystemContext::Auditioning || Type == EFMODSystemContext::Editor)
     {
@@ -655,6 +702,13 @@ void FFMODStudioModule::CreateStudioSystem(EFMODSystemContext::Type Type)
     if (Type == EFMODSystemContext::Runtime)
     {
         // Add interrupt callbacks for Mobile
+<<<<<<< Updated upstream
+=======
+#if PLATFORM_IOS || PLATFORM_TVOS
+        InitializeAudioSession();
+#endif
+
+>>>>>>> Stashed changes
         FCoreDelegates::ApplicationWillDeactivateDelegate.AddRaw(this, &FFMODStudioModule::HandleApplicationWillDeactivate);
         FCoreDelegates::ApplicationHasReactivatedDelegate.AddRaw(this, &FFMODStudioModule::HandleApplicationHasReactivated);
     }
@@ -1095,11 +1149,16 @@ void FFMODStudioModule::SetInPIE(bool bInPIE, bool simulating)
         // TODO: Stop sounds for the Editor system? What should happen if the user previews a sequence with transport
         // controls then starts a PIE session? What does happen?
 
+<<<<<<< Updated upstream
         UE_LOG(LogFMOD, Log, TEXT("Creating runtime Studio System"));
         ListenerCount = 1;
         CreateStudioSystem(EFMODSystemContext::Runtime);
 
         UE_LOG(LogFMOD, Log, TEXT("Loading Banks"));
+=======
+        ListenerCount = 1;
+        CreateStudioSystem(EFMODSystemContext::Runtime);
+>>>>>>> Stashed changes
         LoadBanks(EFMODSystemContext::Runtime);
 
         const UFMODSettings &Settings = *GetDefault<UFMODSettings>();
@@ -1149,7 +1208,13 @@ void FFMODStudioModule::SetSystemPaused(bool paused)
 {
     if (StudioSystem[EFMODSystemContext::Runtime])
     {
+<<<<<<< Updated upstream
         if (bMixerPaused != paused)
+=======
+        bool expected = !paused;
+
+        if (bMixerPaused.compare_exchange_strong(expected, paused))
+>>>>>>> Stashed changes
         {
             FMOD::System *LowLevelSystem = nullptr;
             verifyfmod(StudioSystem[EFMODSystemContext::Runtime]->getCoreSystem(&LowLevelSystem));
@@ -1169,8 +1234,11 @@ void FFMODStudioModule::SetSystemPaused(bool paused)
                 LowLevelSystem->mixerSuspend();
             }
         }
+<<<<<<< Updated upstream
 
         bMixerPaused = paused;
+=======
+>>>>>>> Stashed changes
     }
 }
 
@@ -1467,4 +1535,62 @@ void FFMODStudioModule::StopAuditioningInstance()
     }
 }
 
+<<<<<<< Updated upstream
 #undef LOCTEXT_NAMESPACE
+=======
+#if PLATFORM_IOS || PLATFORM_TVOS
+void FFMODStudioModule::InitializeAudioSession()
+{
+    [[NSNotificationCenter defaultCenter] addObserverForName:AVAudioSessionInterruptionNotification object:nil queue:nil usingBlock:^(NSNotification *notification)
+    {
+        switch ([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] unsignedIntegerValue])
+        {
+            case AVAudioSessionInterruptionTypeBegan:
+            {
+                if (@available(iOS 10.3, *))
+                {
+                    if ([[notification.userInfo valueForKey:AVAudioSessionInterruptionWasSuspendedKey] boolValue])
+                    {
+                        // If the system suspended the app process and deactivated the audio session then we get a delayed
+                        // interruption notification when the app is re-activated. Just ignore that here.
+                        return;
+                    }
+                }
+                SetSystemPaused(true);
+                break;
+            }
+            case AVAudioSessionInterruptionTypeEnded:
+            {
+                ActivateAudioSession();
+                SetSystemPaused(false);
+                break;
+            }
+        }
+    }];
+
+    [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidBecomeActiveNotification object:nil queue:nil usingBlock:^(NSNotification *notification)
+    {
+    #if PLATFORM_TVOS
+        SetSystemPaused(true);
+    #endif
+        ActivateAudioSession();
+        SetSystemPaused(false);
+    }];
+
+    ActivateAudioSession();
+}
+
+void FFMODStudioModule::ActivateAudioSession()
+{
+    NSError* ActiveError = nil;
+    [[AVAudioSession sharedInstance] setActive:TRUE error:&ActiveError];
+
+    if (ActiveError)
+    {
+        UE_LOG(LogFMOD, Error, TEXT("Failed to set audio session to active = %d [Error = %s]"), TRUE, *FString([ActiveError description]));
+    }
+}
+#endif
+
+#undef LOCTEXT_NAMESPACE
+>>>>>>> Stashed changes

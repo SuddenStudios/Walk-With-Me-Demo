@@ -186,9 +186,17 @@ UFMODAsset *FFMODAssetTable::GetAssetByStudioPath(const FString &InStudioPath) c
 
         if (Row)
         {
+<<<<<<< Updated upstream
             UPackage *Package = FindObject<UPackage>(nullptr, *(Row->PackageName));
             Asset = FindObject<UFMODAsset>(Package, *(Row->AssetName));
         }
+=======
+            UPackage *Package = CreatePackage(*(Row->PackageName));
+            Package->FullyLoad();
+            Asset = FindObject<UFMODAsset>(Package, *(Row->AssetName));
+        }
+
+>>>>>>> Stashed changes
     }
 
     return Asset;

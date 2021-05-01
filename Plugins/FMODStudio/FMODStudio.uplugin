@@ -2,8 +2,13 @@
     "FileVersion" : 3,
 	
 	"FriendlyName" : "FMOD Studio Integration",
+<<<<<<< Updated upstream
 	"Version" : 20108,
 	"VersionName" : "2.01.08",
+=======
+	"Version" : 20109,
+	"VersionName" : "2.01.09",
+>>>>>>> Stashed changes
 	"CreatedBy" : "Firelight Technologies",
 	"CreatedByURL" : "http://fmod.com",
 	"Description" : "FMOD Studio Integration.",

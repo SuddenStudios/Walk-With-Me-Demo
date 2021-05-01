@@ -34,8 +34,15 @@ UFMODSettings::UFMODSettings(const FObjectInitializer &ObjectInitializer)
     StudioUpdatePeriod = 0;
     LiveUpdatePort = 9264;
     EditorLiveUpdatePort = 9265;
+<<<<<<< Updated upstream
     bMatchHardwareSampleRate = true;
     bLockAllBuses = false;
+=======
+    ReloadBanksDelay = 5;
+    bMatchHardwareSampleRate = true;
+    bLockAllBuses = false;
+    bEnableMemoryTracking = false;
+>>>>>>> Stashed changes
 }
 
 FString UFMODSettings::GetFullBankPath() const
@@ -90,6 +97,25 @@ FString UFMODSettings::GetMasterStringsBankFilename() const
 }
 
 #if WITH_EDITOR
+<<<<<<< Updated upstream
+=======
+FString UFMODSettings::GetDesktopBankPath() const
+{
+    FString Path = BankOutputDirectory.Path;
+
+    if (ForcePlatformName.IsEmpty())
+    {
+        Path = Path / "Desktop";
+    }
+    else if (ForcePlatformName != TEXT("."))
+    {
+        Path = Path / ForcePlatformName;
+    }
+
+    return Path;
+}
+
+>>>>>>> Stashed changes
 UFMODSettings::EProblem UFMODSettings::Check() const
 {
     if (!IsBankPathSet())
@@ -97,16 +123,35 @@ UFMODSettings::EProblem UFMODSettings::Check() const
         return BankPathNotSet;
     }
 
+<<<<<<< Updated upstream
     UProjectPackagingSettings* PackagingSettings = Cast<UProjectPackagingSettings>(UProjectPackagingSettings::StaticClass()->GetDefaultObject());
     bool bAddedToNonUFS = false;
     bool bAddedToUFS = false;
+=======
+    // Check packaging settings to ensure that only the correct bank output directory for desktop (or forced platform) banks is set-up for staging
+    FString DesktopBankPath = GetDesktopBankPath();
+    UProjectPackagingSettings* PackagingSettings = Cast<UProjectPackagingSettings>(UProjectPackagingSettings::StaticClass()->GetDefaultObject());
+    bool bCorrectPathAdded = false;
+    bool bOtherPathsAdded = false;
+>>>>>>> Stashed changes
 
     for (int i = 0; i < PackagingSettings->DirectoriesToAlwaysStageAsNonUFS.Num(); ++i)
     {
         if (PackagingSettings->DirectoriesToAlwaysStageAsNonUFS[i].Path.StartsWith(BankOutputDirectory.Path))
         {
+<<<<<<< Updated upstream
             bAddedToNonUFS = true;
             break;
+=======
+            if (PackagingSettings->DirectoriesToAlwaysStageAsNonUFS[i].Path == DesktopBankPath)
+            {
+                bCorrectPathAdded = true;
+            }
+            else
+            {
+                bOtherPathsAdded = true;
+            }
+>>>>>>> Stashed changes
         }
     }
 
@@ -114,11 +159,16 @@ UFMODSettings::EProblem UFMODSettings::Check() const
     {
         if (PackagingSettings->DirectoriesToAlwaysStageAsUFS[i].Path.StartsWith(BankOutputDirectory.Path))
         {
+<<<<<<< Updated upstream
             bAddedToUFS = true;
+=======
+            bOtherPathsAdded = true;
+>>>>>>> Stashed changes
             break;
         }
     }
 
+<<<<<<< Updated upstream
     if (bAddedToUFS && bAddedToNonUFS)
     {
         return AddedToBoth;
@@ -132,6 +182,11 @@ UFMODSettings::EProblem UFMODSettings::Check() const
     if (!bAddedToNonUFS)
     {
         return NotPackaged;
+=======
+    if (!bCorrectPathAdded || bOtherPathsAdded)
+    {
+        return PackagingSettingsBad;
+>>>>>>> Stashed changes
     }
 
     return Okay;

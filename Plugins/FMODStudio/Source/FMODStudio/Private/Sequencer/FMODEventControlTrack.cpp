@@ -21,11 +21,14 @@ const TArray<UMovieSceneSection *> &UFMODEventControlTrack::GetAllSections() con
     return ControlSections;
 }
 
+<<<<<<< Updated upstream
 void UFMODEventControlTrack::RemoveAllAnimationData()
 {
     // do nothing
 }
 
+=======
+>>>>>>> Stashed changes
 bool UFMODEventControlTrack::HasSection(const UMovieSceneSection &Section) const
 {
     return ControlSections.Contains(&Section);
@@ -55,11 +58,27 @@ void UFMODEventControlTrack::AddNewSection(FFrameNumber SectionTime)
     }
 }
 
+<<<<<<< Updated upstream
+=======
+bool UFMODEventControlTrack::SupportsType(TSubclassOf<UMovieSceneSection> SectionClass) const
+{
+    return SectionClass == UFMODEventControlSection::StaticClass();
+}
+
+>>>>>>> Stashed changes
 UMovieSceneSection *UFMODEventControlTrack::CreateNewSection()
 {
     return NewObject<UFMODEventControlSection>(this);
 }
 
+<<<<<<< Updated upstream
+=======
+FMovieSceneEvalTemplatePtr UFMODEventControlTrack::CreateTemplateForSection(const UMovieSceneSection& InSection) const
+{
+    return FFMODEventControlSectionTemplate(*CastChecked<const UFMODEventControlSection>(&InSection));
+}
+
+>>>>>>> Stashed changes
 #if WITH_EDITORONLY_DATA
 FText UFMODEventControlTrack::GetDefaultDisplayName() const
 {

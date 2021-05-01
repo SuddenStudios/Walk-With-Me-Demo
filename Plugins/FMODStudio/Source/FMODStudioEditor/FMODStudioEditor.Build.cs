@@ -40,6 +40,7 @@ namespace UnrealBuildTool.Rules
             PrivateDependencyModuleNames.AddRange(
                 new string[]
                 {
+<<<<<<< Updated upstream
                     "Slate",
                     "SlateCore",
                     "Settings",
@@ -50,12 +51,29 @@ namespace UnrealBuildTool.Rules
                     "PropertyEditor",
                     "WorkspaceMenuStructure",
                     "Sockets",
+=======
+                    "AssetRegistry",
+                    "AssetTools",
+                    "EditorStyle",
+                    "LevelEditor",
+>>>>>>> Stashed changes
                     "LevelSequence",
                     "MainFrame",
                     "MovieScene",
                     "MovieSceneTracks",
                     "MovieSceneTools",
+<<<<<<< Updated upstream
                     "ToolMenus"
+=======
+                    "PropertyEditor",
+                    "Settings",
+                    "Slate",
+                    "SlateCore",
+                    "Sockets",
+                    "SourceControl",
+                    "ToolMenus",
+                    "WorkspaceMenuStructure",
+>>>>>>> Stashed changes
                 }
                 );
         }

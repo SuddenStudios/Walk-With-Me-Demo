@@ -4,6 +4,7 @@
 #include "Channels/MovieSceneChannelHandle.h"
 #include "Sequencer/FMODEventControlSection.h"
 
+<<<<<<< Updated upstream
 #include "FMODChannelEditors.generated.h"
 
 /** KeyStruct overrides */
@@ -29,3 +30,13 @@ struct TStructOpsTypeTraits<FFMODEventControlKeyStruct> : public TStructOpsTypeT
         WithCopy = false
     };
 };
+=======
+/** Key editor overrides */
+bool CanCreateKeyEditor(const FFMODEventControlChannel* Channel);
+
+TSharedRef<SWidget> CreateKeyEditor(const TMovieSceneChannelHandle<FFMODEventControlChannel>& Channel, UMovieSceneSection* Section,
+    const FGuid& InObjectBindingID, TWeakPtr<FTrackInstancePropertyBindings> PropertyBindings, TWeakPtr<ISequencer> InSequencer);
+
+/** Key drawing overrides */
+void DrawKeys(FFMODEventControlChannel *Channel, TArrayView<const FKeyHandle> InKeyHandles, const UMovieSceneSection* InOwner, TArrayView<FKeyDrawParams> OutKeyDrawParams);
+>>>>>>> Stashed changes
