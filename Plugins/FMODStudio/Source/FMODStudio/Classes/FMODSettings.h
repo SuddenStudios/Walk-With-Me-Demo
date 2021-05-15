@@ -15,18 +15,7 @@ enum EFMODLogging
     LEVEL_NONE = 0,
     LEVEL_ERROR = 1,
     LEVEL_WARNING = 2,
-<<<<<<< Updated upstream
-    LEVEL_LOG = 4,
-    TYPE_MEMORY = 100,
-    TYPE_FILE = 200,
-    TYPE_CODEC = 400,
-    TYPE_TRACE = 800,
-    DISPLAY_TIMESTAMPS = 10000,
-    DISPLAY_LINENUMBERS = 20000,
-    DISPLAY_THREAD = 40000
-=======
     LEVEL_LOG = 4
->>>>>>> Stashed changes
 };
 
 UENUM()
@@ -238,8 +227,6 @@ public:
     int32 EditorLiveUpdatePort;
 
     /**
-<<<<<<< Updated upstream
-=======
     * Delay in seconds before automatically reloading modified banks from disk. This can be extended if building
     * banks takes a long time and UE4 tries to reload banks before building is completed.
     * Set to 0 to disable automatic bank reloading.
@@ -254,7 +241,6 @@ public:
     bool bEnableMemoryTracking;
 
     /**
->>>>>>> Stashed changes
 	 * Extra plugin files to load.  
 	 * The plugin files should sit alongside the FMOD dynamic libraries in the ThirdParty directory.
 	 */
@@ -298,12 +284,9 @@ public:
     UPROPERTY(config, EditAnywhere, Category = Advanced)
     FString WavWriterPath;
 
-<<<<<<< Updated upstream
-=======
     /*
     * Specify the logging level to use in a debug/development build.
     */
->>>>>>> Stashed changes
     UPROPERTY(config, EditAnywhere, Category = Advanced)
     TEnumAsByte<EFMODLogging> LoggingLevel;
 
@@ -341,24 +324,15 @@ public:
     FString GetMasterStringsBankFilename() const;
 
 #if WITH_EDITOR
-<<<<<<< Updated upstream
-=======
     /** Get the path desktop banks. */
     FString GetDesktopBankPath() const;
 
->>>>>>> Stashed changes
     /** Check the settings for any configuration issues. */
     enum EProblem
     {
         Okay,
         BankPathNotSet,
-<<<<<<< Updated upstream
-        AddedToUFS,
-        NotPackaged,
-        AddedToBoth
-=======
         PackagingSettingsBad
->>>>>>> Stashed changes
     };
 
     EProblem Check() const;

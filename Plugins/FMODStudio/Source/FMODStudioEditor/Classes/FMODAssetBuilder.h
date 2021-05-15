@@ -41,18 +41,6 @@ private:
         FString Path;
     };
 
-<<<<<<< Updated upstream
-    void BuildBankLookup(const FString &AssetName, const FString &PackagePath, const UFMODSettings &InSettings);
-    void BuildAssets(const UFMODSettings &InSettings);
-    void BuildAssetLookup(const FString &AssetName, const FString &PackagePath);
-
-    FString GetAssetClassName(UClass *AssetClass);
-    bool MakeAssetCreateInfo(const FGuid &AssetGuid, const FString &StudioPath, AssetCreateInfo *CreateInfo);
-    UFMODAsset *CreateAsset(const AssetCreateInfo& CreateInfo);
-    void DeleteAsset(UObject *Asset);
-
-    TMap<FString, TWeakObjectPtr<UFMODAsset>> NameLookup;
-=======
     void BuildBankLookup(const FString &AssetName, const FString &PackagePath, const UFMODSettings &InSettings, TArray<UObject*>& AssetsToSave);
     void BuildAssets(const UFMODSettings &InSettings, const FString &AssetLookupName, const FString &AssetLookupPath, TArray<UObject*>& AssetsToSave,
         TArray<UObject*>& AssetsToDelete);
@@ -63,7 +51,6 @@ private:
     void SaveAssets(TArray<UObject*>& AssetsToSave);
     void DeleteAssets(TArray<UObject*>& AssetsToDelete);
 
->>>>>>> Stashed changes
     FMOD::Studio::System *StudioSystem{};
     UFMODBankLookup *BankLookup{};
 };

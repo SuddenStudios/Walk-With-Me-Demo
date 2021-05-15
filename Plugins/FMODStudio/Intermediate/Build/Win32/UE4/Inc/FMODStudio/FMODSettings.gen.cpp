@@ -98,7 +98,7 @@ void EmptyLinkFunctionForGeneratedCodeFMODSettings() {}
 		return EFMODLogging_StaticEnum();
 	}
 	static FCompiledInDeferEnum Z_CompiledInDeferEnum_UEnum_EFMODLogging(EFMODLogging_StaticEnum, TEXT("/Script/FMODStudio"), TEXT("EFMODLogging"), false, nullptr, nullptr);
-	uint32 Get_Z_Construct_UEnum_FMODStudio_EFMODLogging_Hash() { return 3944271889U; }
+	uint32 Get_Z_Construct_UEnum_FMODStudio_EFMODLogging_Hash() { return 3818620986U; }
 	UEnum* Z_Construct_UEnum_FMODStudio_EFMODLogging()
 	{
 #if WITH_HOT_RELOAD
@@ -114,28 +114,14 @@ void EmptyLinkFunctionForGeneratedCodeFMODSettings() {}
 				{ "LEVEL_ERROR", (int64)LEVEL_ERROR },
 				{ "LEVEL_WARNING", (int64)LEVEL_WARNING },
 				{ "LEVEL_LOG", (int64)LEVEL_LOG },
-				{ "TYPE_MEMORY", (int64)TYPE_MEMORY },
-				{ "TYPE_FILE", (int64)TYPE_FILE },
-				{ "TYPE_CODEC", (int64)TYPE_CODEC },
-				{ "TYPE_TRACE", (int64)TYPE_TRACE },
-				{ "DISPLAY_TIMESTAMPS", (int64)DISPLAY_TIMESTAMPS },
-				{ "DISPLAY_LINENUMBERS", (int64)DISPLAY_LINENUMBERS },
-				{ "DISPLAY_THREAD", (int64)DISPLAY_THREAD },
 			};
 #if WITH_METADATA
 			const UE4CodeGen_Private::FMetaDataPairParam Enum_MetaDataParams[] = {
-				{ "DISPLAY_LINENUMBERS.Name", "DISPLAY_LINENUMBERS" },
-				{ "DISPLAY_THREAD.Name", "DISPLAY_THREAD" },
-				{ "DISPLAY_TIMESTAMPS.Name", "DISPLAY_TIMESTAMPS" },
 				{ "LEVEL_ERROR.Name", "LEVEL_ERROR" },
 				{ "LEVEL_LOG.Name", "LEVEL_LOG" },
 				{ "LEVEL_NONE.Name", "LEVEL_NONE" },
 				{ "LEVEL_WARNING.Name", "LEVEL_WARNING" },
 				{ "ModuleRelativePath", "Classes/FMODSettings.h" },
-				{ "TYPE_CODEC.Name", "TYPE_CODEC" },
-				{ "TYPE_FILE.Name", "TYPE_FILE" },
-				{ "TYPE_MEMORY.Name", "TYPE_MEMORY" },
-				{ "TYPE_TRACE.Name", "TYPE_TRACE" },
 			};
 #endif
 			static const UE4CodeGen_Private::FEnumParams EnumParams = {
@@ -528,6 +514,15 @@ static struct FScriptStruct_FMODStudio_StaticRegisterNativesFCustomPoolSizes
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_EditorLiveUpdatePort_MetaData[];
 #endif
 		static const UE4CodeGen_Private::FIntPropertyParams NewProp_EditorLiveUpdatePort;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_ReloadBanksDelay_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FIntPropertyParams NewProp_ReloadBanksDelay;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bEnableMemoryTracking_MetaData[];
+#endif
+		static void NewProp_bEnableMemoryTracking_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bEnableMemoryTracking;
 		static const UE4CodeGen_Private::FStrPropertyParams NewProp_PluginFiles_Inner;
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_PluginFiles_MetaData[];
@@ -817,6 +812,28 @@ static struct FScriptStruct_FMODStudio_StaticRegisterNativesFCustomPoolSizes
 	};
 #endif
 	const UE4CodeGen_Private::FIntPropertyParams Z_Construct_UClass_UFMODSettings_Statics::NewProp_EditorLiveUpdatePort = { "EditorLiveUpdatePort", nullptr, (EPropertyFlags)0x0010000000004001, UE4CodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UFMODSettings, EditorLiveUpdatePort), METADATA_PARAMS(Z_Construct_UClass_UFMODSettings_Statics::NewProp_EditorLiveUpdatePort_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UFMODSettings_Statics::NewProp_EditorLiveUpdatePort_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UFMODSettings_Statics::NewProp_ReloadBanksDelay_MetaData[] = {
+		{ "Category", "Advanced" },
+		{ "Comment", "/**\n    * Delay in seconds before automatically reloading modified banks from disk. This can be extended if building\n    * banks takes a long time and UE4 tries to reload banks before building is completed.\n    * Set to 0 to disable automatic bank reloading.\n    */" },
+		{ "ModuleRelativePath", "Classes/FMODSettings.h" },
+		{ "ToolTip", "Delay in seconds before automatically reloading modified banks from disk. This can be extended if building\nbanks takes a long time and UE4 tries to reload banks before building is completed.\nSet to 0 to disable automatic bank reloading." },
+	};
+#endif
+	const UE4CodeGen_Private::FIntPropertyParams Z_Construct_UClass_UFMODSettings_Statics::NewProp_ReloadBanksDelay = { "ReloadBanksDelay", nullptr, (EPropertyFlags)0x0010000000004001, UE4CodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UFMODSettings, ReloadBanksDelay), METADATA_PARAMS(Z_Construct_UClass_UFMODSettings_Statics::NewProp_ReloadBanksDelay_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UFMODSettings_Statics::NewProp_ReloadBanksDelay_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UFMODSettings_Statics::NewProp_bEnableMemoryTracking_MetaData[] = {
+		{ "Category", "Advanced" },
+		{ "Comment", "/**\n    * Enable memory tracking.\n    */" },
+		{ "ModuleRelativePath", "Classes/FMODSettings.h" },
+		{ "ToolTip", "Enable memory tracking." },
+	};
+#endif
+	void Z_Construct_UClass_UFMODSettings_Statics::NewProp_bEnableMemoryTracking_SetBit(void* Obj)
+	{
+		((UFMODSettings*)Obj)->bEnableMemoryTracking = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_UFMODSettings_Statics::NewProp_bEnableMemoryTracking = { "bEnableMemoryTracking", nullptr, (EPropertyFlags)0x0010000000004001, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(UFMODSettings), &Z_Construct_UClass_UFMODSettings_Statics::NewProp_bEnableMemoryTracking_SetBit, METADATA_PARAMS(Z_Construct_UClass_UFMODSettings_Statics::NewProp_bEnableMemoryTracking_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UFMODSettings_Statics::NewProp_bEnableMemoryTracking_MetaData)) };
 	const UE4CodeGen_Private::FStrPropertyParams Z_Construct_UClass_UFMODSettings_Statics::NewProp_PluginFiles_Inner = { "PluginFiles", nullptr, (EPropertyFlags)0x0000000000004000, UE4CodeGen_Private::EPropertyGenFlags::Str, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, METADATA_PARAMS(nullptr, 0) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UFMODSettings_Statics::NewProp_PluginFiles_MetaData[] = {
@@ -885,7 +902,9 @@ static struct FScriptStruct_FMODStudio_StaticRegisterNativesFCustomPoolSizes
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UFMODSettings_Statics::NewProp_LoggingLevel_MetaData[] = {
 		{ "Category", "Advanced" },
+		{ "Comment", "/*\n    * Specify the logging level to use in a debug/development build.\n    */" },
 		{ "ModuleRelativePath", "Classes/FMODSettings.h" },
+		{ "ToolTip", "* Specify the logging level to use in a debug/development build." },
 	};
 #endif
 	const UE4CodeGen_Private::FBytePropertyParams Z_Construct_UClass_UFMODSettings_Statics::NewProp_LoggingLevel = { "LoggingLevel", nullptr, (EPropertyFlags)0x0010000000004001, UE4CodeGen_Private::EPropertyGenFlags::Byte, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(UFMODSettings, LoggingLevel), Z_Construct_UEnum_FMODStudio_EFMODLogging, METADATA_PARAMS(Z_Construct_UClass_UFMODSettings_Statics::NewProp_LoggingLevel_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_UFMODSettings_Statics::NewProp_LoggingLevel_MetaData)) };
@@ -940,6 +959,8 @@ static struct FScriptStruct_FMODStudio_StaticRegisterNativesFCustomPoolSizes
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UFMODSettings_Statics::NewProp_MemoryPoolSizes,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UFMODSettings_Statics::NewProp_LiveUpdatePort,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UFMODSettings_Statics::NewProp_EditorLiveUpdatePort,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UFMODSettings_Statics::NewProp_ReloadBanksDelay,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UFMODSettings_Statics::NewProp_bEnableMemoryTracking,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UFMODSettings_Statics::NewProp_PluginFiles_Inner,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UFMODSettings_Statics::NewProp_PluginFiles,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UFMODSettings_Statics::NewProp_ContentBrowserPrefix,
@@ -980,7 +1001,7 @@ static struct FScriptStruct_FMODStudio_StaticRegisterNativesFCustomPoolSizes
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UFMODSettings, 1506515097);
+	IMPLEMENT_CLASS(UFMODSettings, 4228141306);
 	template<> FMODSTUDIO_API UClass* StaticClass<UFMODSettings>()
 	{
 		return UFMODSettings::StaticClass();

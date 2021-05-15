@@ -9,11 +9,8 @@
 FFMODBankUpdateNotifier::FFMODBankUpdateNotifier()
     : bUpdateEnabled(true)
     , NextRefreshTime(FDateTime::MinValue())
-<<<<<<< Updated upstream
-=======
     , FileTime(FDateTime::MinValue())
     , Countdown(0.0f)
->>>>>>> Stashed changes
 {
 }
 
@@ -21,27 +18,14 @@ void FFMODBankUpdateNotifier::SetFilePath(const FString &InPath)
 {
     FilePath = InPath;
     NextRefreshTime = FDateTime::MinValue();
-<<<<<<< Updated upstream
-    FileTime = FDateTime::MinValue();
-}
-
-void FFMODBankUpdateNotifier::Update()
-=======
     FileTime = MostRecentFileTime();
 }
 
 void FFMODBankUpdateNotifier::Update(float DeltaTime)
->>>>>>> Stashed changes
 {
     if (bUpdateEnabled)
     {
         FDateTime CurTime = FDateTime::UtcNow();
-<<<<<<< Updated upstream
-        if (CurTime >= NextRefreshTime)
-        {
-            NextRefreshTime = CurTime + FTimespan(0, 0, 1);
-            Refresh();
-=======
 
         if (CurTime >= NextRefreshTime)
         {
@@ -57,7 +41,6 @@ void FFMODBankUpdateNotifier::Update(float DeltaTime)
             {
                 BanksUpdatedEvent.Broadcast();
             }
->>>>>>> Stashed changes
         }
     }
 }
@@ -70,12 +53,9 @@ void FFMODBankUpdateNotifier::EnableUpdate(bool bEnable)
     {
         // Refreshing right after update is enabled is not desirable
         NextRefreshTime = FDateTime::UtcNow() + FTimespan(0, 0, 1);
-<<<<<<< Updated upstream
-=======
 
         // Cancel any pending countdown
         Countdown = 0.0f;
->>>>>>> Stashed changes
     }
 }
 
@@ -83,17 +63,6 @@ void FFMODBankUpdateNotifier::Refresh()
 {
     if (!FilePath.IsEmpty())
     {
-<<<<<<< Updated upstream
-        const FDateTime NewFileTime = IFileManager::Get().GetTimeStamp(*FilePath);
-        if (NewFileTime != FileTime)
-        {
-            FileTime = NewFileTime;
-            UE_LOG(LogFMOD, Log, TEXT("File has changed: %s"), *FilePath);
-
-            BanksUpdatedEvent.Broadcast();
-        }
-    }
-=======
         FDateTime NewFileTime = MostRecentFileTime();
 
         if (NewFileTime != FileTime)
@@ -124,5 +93,4 @@ FDateTime FFMODBankUpdateNotifier::MostRecentFileTime()
     }
 
     return MostRecent;
->>>>>>> Stashed changes
 }

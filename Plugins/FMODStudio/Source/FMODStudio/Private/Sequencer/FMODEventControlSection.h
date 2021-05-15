@@ -29,27 +29,13 @@ struct FFMODEventControlChannel : public FMovieSceneByteChannel
 template <>
 struct TStructOpsTypeTraits<FFMODEventControlChannel> : public TStructOpsTypeTraitsBase2<FFMODEventControlChannel>
 {
-<<<<<<< Updated upstream
-    enum
-    {
-        WithStructuredSerializeFromMismatchedTag = true
-    };
-=======
     enum { WithStructuredSerializeFromMismatchedTag = true };
->>>>>>> Stashed changes
 };
 
 template <>
 struct TMovieSceneChannelTraits<FFMODEventControlChannel> : TMovieSceneChannelTraitsBase<FFMODEventControlChannel>
 {
-<<<<<<< Updated upstream
-    enum
-    {
-        SupportsDefaults = false
-    };
-=======
     enum { SupportsDefaults = false };
->>>>>>> Stashed changes
 
 #if WITH_EDITOR
 

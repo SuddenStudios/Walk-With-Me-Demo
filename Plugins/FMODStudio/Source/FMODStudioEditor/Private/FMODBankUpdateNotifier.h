@@ -12,11 +12,7 @@ public:
     FFMODBankUpdateNotifier();
 
     void SetFilePath(const FString &InPath);
-<<<<<<< Updated upstream
-    void Update();
-=======
     void Update(float DeltaTime);
->>>>>>> Stashed changes
 
     void EnableUpdate(bool bEnable);
 
@@ -24,17 +20,11 @@ public:
 
 private:
     void Refresh();
-<<<<<<< Updated upstream
-=======
     FDateTime MostRecentFileTime();
->>>>>>> Stashed changes
 
     bool bUpdateEnabled;
     FString FilePath;
     FDateTime NextRefreshTime;
     FDateTime FileTime;
-<<<<<<< Updated upstream
-=======
     float Countdown;
->>>>>>> Stashed changes
 };

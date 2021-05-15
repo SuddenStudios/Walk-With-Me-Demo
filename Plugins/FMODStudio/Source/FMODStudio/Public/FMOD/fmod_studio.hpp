@@ -153,10 +153,7 @@ namespace Studio
         FMOD_RESULT F_API isOneshot(bool *oneshot) const;
         FMOD_RESULT F_API isStream(bool *isStream) const;
         FMOD_RESULT F_API is3D(bool *is3d) const;
-<<<<<<< Updated upstream
-=======
         FMOD_RESULT F_API isDopplerEnabled(bool *doppler) const;
->>>>>>> Stashed changes
         FMOD_RESULT F_API hasCue(bool *cue) const;
 
         // Playback control

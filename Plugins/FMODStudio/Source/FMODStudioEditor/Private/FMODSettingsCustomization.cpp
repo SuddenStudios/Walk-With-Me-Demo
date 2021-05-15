@@ -46,32 +46,6 @@ public:
             FText()
         );
 
-<<<<<<< Updated upstream
-        TSharedRef<SWidget> NotPackagedWidget = MakeRow(
-            "SettingsEditor.WarningIcon",
-            LOCTEXT("NotPackagedText",
-                "Bank Output Directory has not been added to the \"Additional Non-Asset Directories to Copy\" list."
-            ),
-            LOCTEXT("AddToNonUFS", "Add")
-        );
-
-        TSharedRef<SWidget> AddedToUFSWidget = MakeRow(
-            "SettingsEditor.WarningIcon",
-            LOCTEXT("AddedToUFSText", 
-                "Bank Output Directory has been added to the \"Additional Non-Asset Directories to Package\" list. "
-                "It is recommended to move FMOD to the \"Additional Non-Asset Directories to Copy\" list."
-            ),
-            LOCTEXT("MoveToNonUFS", "Move")
-        );
-
-        TSharedRef<SWidget> AddedToBothWidget = MakeRow(
-            "SettingsEditor.WarningIcon",
-            LOCTEXT("AddedToBothText",
-                "Bank Output Directory has been added to the \"Additional Non-Asset Directories to Package\" list. "
-                "It is recommended to remove FMOD from the \"Additional Non-Asset Directories to Package\" list."
-            ),
-            LOCTEXT("RemoveFromUFS", "Remove")
-=======
         TSharedRef<SWidget> PackagingSettingsBadWidget = MakeRow(
             "SettingsEditor.WarningIcon",
             LOCTEXT("PackagingSettingsBadText",
@@ -81,7 +55,6 @@ public:
                 "or the \"Additional Non-Asset Directories to Package\" list."
             ),
             LOCTEXT("FixPackagingSettings", "Fix")
->>>>>>> Stashed changes
         );
 
         ChildSlot
@@ -106,21 +79,7 @@ public:
 
                     + SWidgetSwitcher::Slot()
                     [
-<<<<<<< Updated upstream
-                        AddedToUFSWidget
-                    ]
-
-                    + SWidgetSwitcher::Slot()
-                    [
-                        NotPackagedWidget
-                    ]
-
-                    + SWidgetSwitcher::Slot()
-                    [
-                        AddedToBothWidget
-=======
                         PackagingSettingsBadWidget
->>>>>>> Stashed changes
                     ]
                 ]
             ];
@@ -185,14 +144,6 @@ private:
     {
         const UFMODSettings& Settings = *GetDefault<UFMODSettings>();
         UProjectPackagingSettings* PackagingSettings = Cast<UProjectPackagingSettings>(UProjectPackagingSettings::StaticClass()->GetDefaultObject());
-<<<<<<< Updated upstream
-        bool UpdateConfigFile = false;
-
-        if (SettingsState == UFMODSettings::AddedToUFS || SettingsState == UFMODSettings::AddedToBoth)
-        {
-            // Remove from non-asset directories to package list
-            for (int i = 0; i < PackagingSettings->DirectoriesToAlwaysStageAsUFS.Num(); ++i)
-=======
 
         if (SettingsState == UFMODSettings::PackagingSettingsBad)
         {
@@ -210,28 +161,10 @@ private:
             }
 
             for (int i = 0; i < PackagingSettings->DirectoriesToAlwaysStageAsUFS.Num();)
->>>>>>> Stashed changes
             {
                 if (PackagingSettings->DirectoriesToAlwaysStageAsUFS[i].Path.StartsWith(Settings.BankOutputDirectory.Path))
                 {
                     PackagingSettings->DirectoriesToAlwaysStageAsUFS.RemoveAt(i);
-<<<<<<< Updated upstream
-                    UpdateConfigFile = true;
-                    break;
-                }
-            }
-        }
-
-        if (SettingsState == UFMODSettings::AddedToUFS || SettingsState == UFMODSettings::NotPackaged)
-        {
-            // Add to non-asset directories to copy list
-            PackagingSettings->DirectoriesToAlwaysStageAsNonUFS.Add(Settings.BankOutputDirectory);
-            UpdateConfigFile = true;
-        }
-
-        if (UpdateConfigFile)
-        {
-=======
                 }
                 else
                 {
@@ -244,7 +177,6 @@ private:
             BankPath.Path = Settings.GetDesktopBankPath();
             PackagingSettings->DirectoriesToAlwaysStageAsNonUFS.Add(BankPath);
 
->>>>>>> Stashed changes
             PackagingSettings->UpdateDefaultConfigFile();
         }
 

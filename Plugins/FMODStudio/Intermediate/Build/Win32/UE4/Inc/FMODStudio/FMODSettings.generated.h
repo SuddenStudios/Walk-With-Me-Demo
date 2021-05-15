@@ -13,24 +13,24 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define FMODSTUDIO_FMODSettings_generated_h
 
-#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_76_GENERATED_BODY \
+#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_69_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FFMODProjectLocale_Statics; \
 	FMODSTUDIO_API static class UScriptStruct* StaticStruct();
 
 
 template<> FMODSTUDIO_API UScriptStruct* StaticStruct<struct FFMODProjectLocale>();
 
-#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_45_GENERATED_BODY \
+#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_38_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FCustomPoolSizes_Statics; \
 	FMODSTUDIO_API static class UScriptStruct* StaticStruct();
 
 
 template<> FMODSTUDIO_API UScriptStruct* StaticStruct<struct FCustomPoolSizes>();
 
-#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_100_SPARSE_DATA
-#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_100_RPC_WRAPPERS
-#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_100_RPC_WRAPPERS_NO_PURE_DECLS
-#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_100_INCLASS_NO_PURE_DECLS \
+#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_93_SPARSE_DATA
+#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_93_RPC_WRAPPERS
+#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_93_RPC_WRAPPERS_NO_PURE_DECLS
+#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_93_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUFMODSettings(); \
 	friend struct Z_Construct_UClass_UFMODSettings_Statics; \
@@ -41,7 +41,7 @@ public: \
 
 
 
-#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_100_INCLASS \
+#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_93_INCLASS \
 private: \
 	static void StaticRegisterNativesUFMODSettings(); \
 	friend struct Z_Construct_UClass_UFMODSettings_Statics; \
@@ -52,7 +52,7 @@ public: \
 
 
 
-#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_100_STANDARD_CONSTRUCTORS \
+#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_93_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UFMODSettings(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UFMODSettings) \
@@ -65,7 +65,7 @@ private: \
 public:
 
 
-#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_100_ENHANCED_CONSTRUCTORS \
+#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_93_ENHANCED_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UFMODSettings(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()) : Super(ObjectInitializer) { }; \
 private: \
@@ -78,28 +78,28 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(UFMODSettings); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UFMODSettings)
 
 
-#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_100_PRIVATE_PROPERTY_OFFSET
-#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_97_PROLOG
-#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_100_GENERATED_BODY_LEGACY \
+#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_93_PRIVATE_PROPERTY_OFFSET
+#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_90_PROLOG
+#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_93_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_100_PRIVATE_PROPERTY_OFFSET \
-	HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_100_SPARSE_DATA \
-	HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_100_RPC_WRAPPERS \
-	HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_100_INCLASS \
-	HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_100_STANDARD_CONSTRUCTORS \
+	HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_93_PRIVATE_PROPERTY_OFFSET \
+	HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_93_SPARSE_DATA \
+	HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_93_RPC_WRAPPERS \
+	HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_93_INCLASS \
+	HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_93_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_100_GENERATED_BODY \
+#define HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_93_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_100_PRIVATE_PROPERTY_OFFSET \
-	HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_100_SPARSE_DATA \
-	HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_100_RPC_WRAPPERS_NO_PURE_DECLS \
-	HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_100_INCLASS_NO_PURE_DECLS \
-	HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_100_ENHANCED_CONSTRUCTORS \
+	HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_93_PRIVATE_PROPERTY_OFFSET \
+	HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_93_SPARSE_DATA \
+	HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_93_RPC_WRAPPERS_NO_PURE_DECLS \
+	HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_93_INCLASS_NO_PURE_DECLS \
+	HostProject_Plugins_FMODStudio_Source_FMODStudio_Classes_FMODSettings_h_93_ENHANCED_CONSTRUCTORS \
 static_assert(false, "Unknown access specifier for GENERATED_BODY() macro in class FMODSettings."); \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
@@ -118,12 +118,5 @@ template<> FMODSTUDIO_API UClass* StaticClass<class UFMODSettings>();
 	op(LEVEL_NONE) \
 	op(LEVEL_ERROR) \
 	op(LEVEL_WARNING) \
-	op(LEVEL_LOG) \
-	op(TYPE_MEMORY) \
-	op(TYPE_FILE) \
-	op(TYPE_CODEC) \
-	op(TYPE_TRACE) \
-	op(DISPLAY_TIMESTAMPS) \
-	op(DISPLAY_LINENUMBERS) \
-	op(DISPLAY_THREAD) 
+	op(LEVEL_LOG) 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

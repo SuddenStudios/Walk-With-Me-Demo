@@ -18,6 +18,7 @@ void EmptyLinkFunctionForGeneratedCodeFMODEventControlTrack() {}
 	MOVIESCENE_API UClass* Z_Construct_UClass_UMovieSceneNameableTrack();
 	UPackage* Z_Construct_UPackage__Script_FMODStudio();
 	MOVIESCENE_API UClass* Z_Construct_UClass_UMovieSceneSection_NoRegister();
+	MOVIESCENE_API UClass* Z_Construct_UClass_UMovieSceneTrackTemplateProducer_NoRegister();
 // End Cross Module References
 	void UFMODEventControlTrack::StaticRegisterNativesUFMODEventControlTrack()
 	{
@@ -38,6 +39,7 @@ void EmptyLinkFunctionForGeneratedCodeFMODEventControlTrack() {}
 #endif
 		static const UE4CodeGen_Private::FArrayPropertyParams NewProp_ControlSections;
 		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
+		static const UE4CodeGen_Private::FImplementedInterfaceParams InterfaceParams[];
 		static const FCppClassTypeInfoStatic StaticCppClassTypeInfo;
 		static const UE4CodeGen_Private::FClassParams ClassParams;
 	};
@@ -67,6 +69,9 @@ void EmptyLinkFunctionForGeneratedCodeFMODEventControlTrack() {}
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UFMODEventControlTrack_Statics::NewProp_ControlSections_Inner,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_UFMODEventControlTrack_Statics::NewProp_ControlSections,
 	};
+		const UE4CodeGen_Private::FImplementedInterfaceParams Z_Construct_UClass_UFMODEventControlTrack_Statics::InterfaceParams[] = {
+			{ Z_Construct_UClass_UMovieSceneTrackTemplateProducer_NoRegister, (int32)VTABLE_OFFSET(UFMODEventControlTrack, IMovieSceneTrackTemplateProducer), false },
+		};
 	const FCppClassTypeInfoStatic Z_Construct_UClass_UFMODEventControlTrack_Statics::StaticCppClassTypeInfo = {
 		TCppClassTypeTraits<UFMODEventControlTrack>::IsAbstract,
 	};
@@ -77,11 +82,11 @@ void EmptyLinkFunctionForGeneratedCodeFMODEventControlTrack() {}
 		DependentSingletons,
 		nullptr,
 		Z_Construct_UClass_UFMODEventControlTrack_Statics::PropPointers,
-		nullptr,
+		InterfaceParams,
 		UE_ARRAY_COUNT(DependentSingletons),
 		0,
 		UE_ARRAY_COUNT(Z_Construct_UClass_UFMODEventControlTrack_Statics::PropPointers),
-		0,
+		UE_ARRAY_COUNT(InterfaceParams),
 		0x00A800A0u,
 		METADATA_PARAMS(Z_Construct_UClass_UFMODEventControlTrack_Statics::Class_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UClass_UFMODEventControlTrack_Statics::Class_MetaDataParams))
 	};
@@ -94,7 +99,7 @@ void EmptyLinkFunctionForGeneratedCodeFMODEventControlTrack() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UFMODEventControlTrack, 1679051540);
+	IMPLEMENT_CLASS(UFMODEventControlTrack, 683799652);
 	template<> FMODSTUDIO_API UClass* StaticClass<UFMODEventControlTrack>()
 	{
 		return UFMODEventControlTrack::StaticClass();

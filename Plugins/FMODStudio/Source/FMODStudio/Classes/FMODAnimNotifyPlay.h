@@ -27,9 +27,5 @@ public:
 
     // Sound to Play
     UPROPERTY(EditAnywhere, Category = "FMOD Anim Notify", BlueprintReadWrite)
-<<<<<<< Updated upstream
-    TAssetPtr<class UFMODEvent> Event;
-=======
     class UFMODEvent* Event;
->>>>>>> Stashed changes
 };

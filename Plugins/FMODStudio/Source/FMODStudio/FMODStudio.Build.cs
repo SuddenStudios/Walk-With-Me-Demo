@@ -183,15 +183,12 @@ namespace UnrealBuildTool.Rules
             {
                 RuntimeDependencies.Add("$(TargetOutputDir)/" + fmodDllName, fmodDllPath);
                 RuntimeDependencies.Add("$(TargetOutputDir)/" + fmodStudioDllName, fmodStudioDllPath);
-<<<<<<< Updated upstream
-=======
                 foreach (string plugin in plugins)
                 {
                     string pluginPath = System.IO.Path.Combine(libPath, plugin + dllExtension);
                     System.Console.WriteLine("Adding reference to FMOD plugin: " + pluginPath);
                     RuntimeDependencies.Add("$(TargetOutputDir)/" + plugin + dllExtension, pluginPath);
                 }
->>>>>>> Stashed changes
             }
             else if (bAddRuntimeDependencies)
             {
