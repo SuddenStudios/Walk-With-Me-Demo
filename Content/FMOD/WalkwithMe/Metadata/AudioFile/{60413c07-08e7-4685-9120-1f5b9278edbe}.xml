@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.01.00">
+	<object class="AudioFile" id="{60413c07-08e7-4685-9120-1f5b9278edbe}">
+		<property name="assetPath">
+			<value>Boiler Hit 1.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>1.3528344671201815</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{f0a16215-494c-474d-b631-647a363ae164}</destination>
+		</relationship>
+	</object>
+</objects>
